@@ -6,7 +6,6 @@ from torch import optim
 from torch.nn import AvgPool2d
 from ImagePyramid import ImagePyramidLayer
 from BilinearSampling import grid_bilinear_sampling
-from MatInverse import inv
 import os
 
 import numpy as np
@@ -293,7 +292,7 @@ class DirectVO(nn.Module):
                                      self.inv_depth_pyramid[i],
                                      self.xy_pyramid[i])
             self.dIdp_pyramid.append(dIdp)
-            invH = inv(dIdp.t().mm(dIdp))
+            invH = torch.inverse(dIdp.t().mm(dIdp))
             self.invH_pyramid.append(invH)
             # self.invH_dIdp_pyramid.append(self.invH_pyramid[-1].mm(dIdp.t()))
             self.invH_dIdp_pyramid.append(invH.mm(dIdp.t()))
